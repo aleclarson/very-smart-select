@@ -3,7 +3,7 @@
     "displayName": "Very Smart Select",
     "description": "Language-aware smart select; much smarter than the default smart select.",
     "version": "0.3.0",
-    "publisher": "closedcontour",
+    "publisher": "aleclarson",
     "repository": "https://github.com/closedcontour/very-smart-select",
     "engines": {
         "vscode": "^1.21.0"
