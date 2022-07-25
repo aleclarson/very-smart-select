@@ -7,4 +7,5 @@ export interface Range {
 
 export interface SelectionStrategy {
     grow(editor: TextEditor, excludeBrackets: boolean): Range[];
+    wrapJsxElement?(editor: TextEditor): Range[];
 }

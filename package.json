@@ -13,7 +13,8 @@
     ],
     "activationEvents": [
         "onCommand:very-smart-select.grow",
-        "onCommand:very-smart-select.shrink"
+        "onCommand:very-smart-select.shrink",
+        "onCommand:very-smart-select.wrap-jsx-element"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -25,6 +26,11 @@
             {
                 "command": "very-smart-select.shrink",
                 "title": "Very Smart Select: Shrink the selection"
+            },
+            {
+                "command": "very-smart-select.wrap-jsx-element",
+                "title": "Very Smart Select: Wrap Selection Around Nearest JSX Element",
+                "enablement": "editorLangId =~ /react$/"
             }
         ],
         "keybindings": [

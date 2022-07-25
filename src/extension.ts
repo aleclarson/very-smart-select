@@ -1,19 +1,25 @@
 import { window, ExtensionContext, commands, Selection, Disposable, workspace } from "vscode";
 import { SelectionStrategy } from "./api";
 import { TypescriptStrategy } from "./languages/typescript";
+import { ReactStrategy } from "./languages/react";
 
 export function activate(context: ExtensionContext) {
     const verySmartSelect = new VerySmartSelect();
+    context.subscriptions.push(verySmartSelect);
+
     const growCommand = commands.registerCommand("very-smart-select.grow", () => {
         verySmartSelect.grow();
     });
     const shrinkCommand = commands.registerCommand("very-smart-select.shrink", () => {
         verySmartSelect.shrink();
     });
+    const jsxCommand = commands.registerCommand("very-smart-select.wrap-jsx-element", () => {
+        verySmartSelect.wrapJsxElement();
+    });
 
     context.subscriptions.push(growCommand);
     context.subscriptions.push(shrinkCommand);
-    context.subscriptions.push(verySmartSelect);
+    context.subscriptions.push(jsxCommand);
 }
 
 export function deactivate() {}
@@ -35,9 +41,9 @@ class VerySmartSelect {
 
     constructor() {
         this.strategies["typescript"] = new TypescriptStrategy();
-        this.strategies["typescriptreact"] = new TypescriptStrategy();
+        this.strategies["typescriptreact"] = new ReactStrategy();
         this.strategies["javascript"] = new TypescriptStrategy();
-        this.strategies["javascriptreact"] = new TypescriptStrategy();
+        this.strategies["javascriptreact"] = new ReactStrategy();
         this.strategies["json"] = new TypescriptStrategy();
         this.strategies["jsonc"] = new TypescriptStrategy();
 
@@ -77,6 +83,23 @@ class VerySmartSelect {
             this.updateSelections(selections);
         } else {
             commands.executeCommand("editor.action.smartSelect.shrink");
+        }
+    }
+
+    public wrapJsxElement(): void {
+        const editor = window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const doc = editor.document;
+        const strategy = this.strategies[doc.languageId];
+        if (strategy?.wrapJsxElement) {
+            const ranges = strategy.wrapJsxElement(editor);
+            const selections = ranges.map(
+                range => new Selection(doc.positionAt(range.start), doc.positionAt(range.end))
+            );
+            this.updateSelectionsHistory(editor.selections);
+            this.updateSelections(selections);
         }
     }
 
