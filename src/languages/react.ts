@@ -21,7 +21,8 @@ export class ReactStrategy extends TypescriptStrategy {
                         return (
                             node.kind !== SyntaxKind.JsxElement &&
                             node.kind !== SyntaxKind.JsxSelfClosingElement &&
-                            node.kind !== SyntaxKind.JsxFragment
+                            node.kind !== SyntaxKind.JsxFragment &&
+                            node.kind !== SyntaxKind.JsxExpression
                         );
                     }
                 })
